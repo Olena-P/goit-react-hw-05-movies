@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkgoit_react_hw_05_movies=self.webpackChunkgoit_react_hw_05_movies||[]).push([[947],{947:(e,s,t)=>{t.r(s),t.d(s,{default:()=>a});t(791);var i=t(184);const a=()=>(0,i.jsx)(i.Fragment,{children:(0,i.jsx)("h1",{children:" Route MovieDetails"})})}}]);
+//# sourceMappingURL=947.8600bcf1.chunk.js.map
