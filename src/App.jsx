@@ -25,7 +25,7 @@ const StyledLink = styled(NavLink)`
 
 const App = () => {
   return (
-    <BrowserRouter basename="/goit-react-hw-05-movies">
+    <>
       <div
         style={{
           backgroundColor: " #333",
@@ -56,7 +56,7 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
-    </BrowserRouter>
+    </>
   );
 };
 
