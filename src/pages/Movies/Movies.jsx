@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import axios from "axios";
+import { searchMovies } from "api";
 
 const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -12,16 +12,8 @@ const Movies = () => {
   useEffect(() => {
     const performSearch = async () => {
       try {
-        const response = await axios.get(
-          "https://api.themoviedb.org/3/search/movie",
-          {
-            params: {
-              api_key: "8e21f34d58b1a578e492fe7e575bb39e",
-              query: searchQuery,
-            },
-          }
-        );
-        setSearchResults(response.data.results);
+        const results = await searchMovies(searchQuery);
+        setSearchResults(results);
       } catch (error) {
         console.error("Error fetching search results:", error);
       }

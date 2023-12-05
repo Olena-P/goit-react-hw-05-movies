@@ -1,29 +1,22 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { fetchMovieReviews } from "api";
 
 const Reviews = () => {
   const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    const fetchMovieReviews = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/${movieId}/reviews`,
-          {
-            params: {
-              api_key: "8e21f34d58b1a578e492fe7e575bb39e",
-            },
-          }
-        );
-        setReviews(response.data.results);
+        const movieReviews = await fetchMovieReviews(movieId);
+        setReviews(movieReviews);
       } catch (error) {
         console.error("Error fetching movie reviews", error);
       }
     };
 
-    fetchMovieReviews();
+    fetchData();
   }, [movieId]);
 
   return (

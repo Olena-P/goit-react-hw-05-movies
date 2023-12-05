@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Outlet, NavLink } from "react-router-dom";
+import { RotatingLines } from "react-loader-spinner";
 import styled from "styled-components";
 
 const CustomLink = styled(NavLink)`
@@ -34,7 +35,17 @@ const AppLayout = () => {
         </nav>
       </div>
       <main>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense
+          fallback={
+            <RotatingLines
+              strokeColor="grey"
+              strokeWidth="5"
+              animationDuration="0.75"
+              width="96"
+              visible={true}
+            />
+          }
+        >
           <Outlet />
         </Suspense>
       </main>

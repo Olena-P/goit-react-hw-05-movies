@@ -1,36 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Cast from "components/Cast/Cast";
 import Reviews from "components/Reviews/Reviews";
 import "react-tabs/style/react-tabs.css";
+import { fetchMovieDetails } from "api";
 
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchMovieDetails = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/${movieId}`,
-          {
-            params: {
-              api_key: "8e21f34d58b1a578e492fe7e575bb39e",
-            },
-          }
-        );
-        setMovieDetails(response.data);
+        const details = await fetchMovieDetails(movieId);
+        setMovieDetails(details);
       } catch (error) {
         console.error("Error fetching movie details:", error);
       }
     };
 
-    fetchMovieDetails();
+    fetchData();
   }, [movieId]);
 
+  const navigate = useNavigate();
   const goBack = () => {
     navigate(-1);
   };
