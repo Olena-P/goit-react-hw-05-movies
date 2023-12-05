@@ -1,62 +1,34 @@
-import React, { lazy, Suspense } from "react";
-import { Routes, Route, NavLink } from "react-router-dom";
-import styled from "styled-components";
+// import { lazy } from "react";
+import { Routes, Route } from "react-router-dom";
+import AppLayout from "./components/AppLayout/AppLayout";
 import Home from "./pages/Home/Home";
 import Movies from "./pages/Movies/Movies";
-import NotFound from "components/NotFound/NotFound";
+import MovieDetails from "./pages/MovieDetails/MovieDetails";
+import NotFound from "./pages/NotFound/NotFound";
+import Cast from "./components/Cast/Cast";
+import Reviews from "./components/Reviews/Reviews";
 
-const MovieDetails = lazy(() =>
-  import("./components/MovieDetails/MovieDetails")
-);
-const Cast = lazy(() => import("./components/Cast/Cast"));
-const Reviews = lazy(() => import("./components/Reviews/Reviews"));
-
-const StyledLink = styled(NavLink)`
-  color: white;
-  text-decoration: none;
-  margin-right: 20px;
-  font-size: 16px;
-
-  &.active {
-    color: orange;
-    font-weight: bold;
-  }
-`;
+// const Home = lazy(() => import("pages/Home"));
+// const Movies = lazy(() => import("./pages/Movies"));
+// const MovieDetails = lazy(() => import("pages/MovieDetails"));
+// const NotFound = lazy(() => import("pages/NotFound"));
+// const Cast = lazy(() => import("../src/components/Cast/Cast"));
+// const Reviews = lazy(() => import("../src/components/Reviews/Reviews"));
 
 const App = () => {
   return (
-    <>
-      <div
-        style={{
-          backgroundColor: " #333",
-        }}
-      >
-        <nav
-          style={{
-            padding: "20px 50px",
-            margin: "0 auto",
-            maxWidth: "1280px",
-          }}
-        >
-          <StyledLink to="/" end>
-            Home
-          </StyledLink>
-          <StyledLink to="/movies">Movies</StyledLink>
-        </nav>
-      </div>
+    <Routes>
+      <Route path="/" element={<AppLayout />}>
+        <Route index element={<Home />} />
+        <Route path="/movies" element={<Movies />} />
+        <Route path="/movies/:movieId" element={<MovieDetails />}>
+          <Route path="cast" element={<Cast />} />
+          <Route path="reviews" element={<Reviews />} />
+        </Route>
+      </Route>
 
-      <Suspense fallback={<div>Loading...</div>}>
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/movies" element={<Movies />} />
-          <Route path="/movies/:movieId" element={<MovieDetails />}>
-            <Route path="cast" element={<Cast />} />
-            <Route path="reviews" element={<Reviews />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
-    </>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 
