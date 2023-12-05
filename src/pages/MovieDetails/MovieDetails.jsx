@@ -5,18 +5,29 @@ import Cast from "components/Cast/Cast";
 import Reviews from "components/Reviews/Reviews";
 import "react-tabs/style/react-tabs.css";
 import { fetchMovieDetails } from "api";
+import { RotatingLines } from "react-loader-spinner";
+import NotFound from "pages/NotFound/NotFound";
+
+const defaultImg =
+  "https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700";
 
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const details = await fetchMovieDetails(movieId);
         setMovieDetails(details);
       } catch (error) {
         console.error("Error fetching movie details:", error);
+        setError("Something went wrong while fetching movie details.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -30,6 +41,16 @@ const MovieDetails = () => {
 
   return (
     <>
+      {isLoading && (
+        <RotatingLines
+          strokeColor="grey"
+          strokeWidth="5"
+          animationDuration="0.75"
+          width="96"
+          visible={true}
+        />
+      )}
+      {error && <NotFound />}
       {movieDetails && (
         <div
           style={{
@@ -68,13 +89,13 @@ const MovieDetails = () => {
             }}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`}
-              alt=""
-              height={300}
-              style={{
-                borderRadius: "8px",
-                boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-              }}
+              src={
+                movieDetails.poster_path
+                  ? `https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`
+                  : defaultImg
+              }
+              width={250}
+              alt="poster"
             />
             <div
               style={{
