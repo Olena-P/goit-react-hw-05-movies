@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import Cast from "components/Cast/Cast";
-import Reviews from "components/Reviews/Reviews";
+import Cast from "components/Cast";
+import Reviews from "components/Reviews";
 import "react-tabs/style/react-tabs.css";
 import { fetchMovieDetails } from "api";
 import { RotatingLines } from "react-loader-spinner";

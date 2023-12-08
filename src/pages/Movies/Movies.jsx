@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { searchMovies } from "api";
+import MoviesList from "../../components/MovieList";
+import { debounce } from "lodash";
 
 const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -10,16 +12,19 @@ const Movies = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    const performSearch = async () => {
+    const performSearch = async (query) => {
       try {
-        const results = await searchMovies(searchQuery);
+        const results = await searchMovies(query);
         setSearchResults(results);
       } catch (error) {
         console.error("Error fetching search results:", error);
       }
     };
 
-    performSearch();
+    if (searchQuery) {
+      const debouncedSearch = debounce(() => performSearch(searchQuery), 500);
+      debouncedSearch();
+    }
   }, [searchQuery]);
 
   const handleSearchInputChange = (e) => {
@@ -32,7 +37,7 @@ const Movies = () => {
   };
 
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
+    <div style={{ padding: "20px 50px", margin: "0 auto", maxWidth: "1280px" }}>
       <form onSubmit={handleSearchSubmit}>
         <input
           type="text"
@@ -60,23 +65,7 @@ const Movies = () => {
         </button>
       </form>
 
-      <ul style={{ listStyle: "none", padding: "0" }}>
-        {searchResults.map((movie) => (
-          <li key={movie.id} style={{ marginBottom: "10px" }}>
-            <Link
-              to={`/movies/${movie.id}`}
-              style={{
-                textDecoration: "none",
-                color: "#333",
-                fontSize: "18px",
-                fontWeight: "bold",
-              }}
-            >
-              {movie.title}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <MoviesList movies={searchResults} />
     </div>
   );
 };
