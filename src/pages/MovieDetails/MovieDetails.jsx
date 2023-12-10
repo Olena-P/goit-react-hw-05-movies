@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Cast from "components/Cast";
 import Reviews from "components/Reviews";
@@ -7,6 +7,8 @@ import "react-tabs/style/react-tabs.css";
 import { fetchMovieDetails } from "api";
 import { RotatingLines } from "react-loader-spinner";
 import NotFound from "pages/NotFound/NotFound";
+import { useWindowSize } from "hooks/useWindowSize";
+import breakpoints from "theme/breakpoints";
 
 const defaultImg =
   "https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700";
@@ -35,9 +37,19 @@ const MovieDetails = () => {
   }, [movieId]);
 
   const navigate = useNavigate();
-  const goBack = () => {
-    navigate(-1);
+  const location = useLocation();
+  const goBack = location?.state?.from ?? "/";
+
+  const handleGoBack = () => {
+    navigate(goBack);
   };
+
+  const { width } = useWindowSize();
+
+  const getStyles = () => ({
+    flexDirection: width < breakpoints.sm ? "column" : "row",
+    alignItems: width < breakpoints.sm ? "center" : "flex-start",
+  });
 
   return (
     <>
@@ -63,7 +75,7 @@ const MovieDetails = () => {
           }}
         >
           <button
-            onClick={goBack}
+            onClick={handleGoBack}
             style={{
               width: "200px",
               backgroundColor: "#ffcc00",
@@ -86,6 +98,7 @@ const MovieDetails = () => {
               gap: "16px",
               alignItems: "center",
               marginTop: "20px",
+              ...getStyles(),
             }}
           >
             <img

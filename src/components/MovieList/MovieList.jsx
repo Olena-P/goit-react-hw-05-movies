@@ -1,17 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const defaultImg =
   "https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700";
 
 const MoviesList = ({ movies }) => {
+  const location = useLocation();
+
   return (
     <ul
       style={{
-        listStyle: "none",
-        padding: "0",
         display: "flex",
         flexWrap: "wrap",
+        justifyContent: "center",
+        width: "fit-content",
+        listStyle: "none",
+        padding: "0",
         gap: "16px",
       }}
     >
@@ -19,6 +23,7 @@ const MoviesList = ({ movies }) => {
         <Link
           to={`/movies/${movie.id}`}
           key={movie.id}
+          state={{ from: location }}
           style={{
             textDecoration: "none",
             color: "#333",
@@ -34,7 +39,7 @@ const MoviesList = ({ movies }) => {
           }}
         >
           <div>
-            <div style={{ displaya: "block", width: "100%", height: "400px" }}>
+            <div style={{ display: "block", width: "100%", height: "400px" }}>
               <img
                 src={
                   movie.poster_path

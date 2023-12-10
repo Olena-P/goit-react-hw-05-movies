@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { searchMovies } from "api";
 import MoviesList from "../../components/MovieList";
-import { debounce } from "lodash";
 
 const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -11,7 +10,11 @@ const Movies = () => {
   );
   const [searchResults, setSearchResults] = useState([]);
 
+  const query = searchParams.get("query") || "";
+
   useEffect(() => {
+    if (!query.trim()) return;
+
     const performSearch = async (query) => {
       try {
         const results = await searchMovies(query);
@@ -21,11 +24,10 @@ const Movies = () => {
       }
     };
 
-    if (searchQuery) {
-      const debouncedSearch = debounce(() => performSearch(searchQuery), 500);
-      debouncedSearch();
-    }
-  }, [searchQuery]);
+    (async () => {
+      await performSearch(query);
+    })();
+  }, [query]);
 
   const handleSearchInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -37,8 +39,17 @@ const Movies = () => {
   };
 
   return (
-    <div style={{ padding: "20px 50px", margin: "0 auto", maxWidth: "1280px" }}>
-      <form onSubmit={handleSearchSubmit}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "20px 50px",
+        margin: "0 auto",
+        maxWidth: "1280px",
+      }}
+    >
+      <form onSubmit={handleSearchSubmit} style={{ width: "100%" }}>
         <input
           type="text"
           value={searchQuery}
